@@ -38,6 +38,8 @@ public class CalculateInterest implements JavaDelegate {
             total = total.add(monthly);
         }
 
+
+        delegateExecution.setVariable("interest_rate", Double.valueOf(interestRate).toString());
         delegateExecution.setVariable("final_amount", total.setScale(2, RoundingMode.HALF_UP).toPlainString());
         delegateExecution.setVariable("monthly_payment", monthly.setScale(2, RoundingMode.HALF_UP).toPlainString());
     }

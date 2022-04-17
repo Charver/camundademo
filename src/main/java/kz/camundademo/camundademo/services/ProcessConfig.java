@@ -59,13 +59,13 @@ public class ProcessConfig {
         identityService.createMembership(approver.getId(), approvers.getId());
 
         runtimeService.startProcessInstanceByKey("loan",
-                Map.of("loan_amount", "100000", "month_duration", 6, "interest_rate", "10"));
+                Map.of("loan_amount", "100000", "month_duration", 6));
 
         runtimeService.startProcessInstanceByKey("loan",
-                Map.of("loan_amount", "1000000", "month_duration", 12, "interest_rate", "6"));
+                Map.of("loan_amount", "1000000", "month_duration", 12));
 
         runtimeService.startProcessInstanceByKey("loan",
-                Map.of("loan_amount", "10000000", "month_duration", 36, "interest_rate", "4"));
+                Map.of("loan_amount", "10000000", "month_duration", 36));
 
         fillInterestTable();
     }

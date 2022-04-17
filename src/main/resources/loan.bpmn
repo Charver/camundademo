@@ -8,7 +8,6 @@
             <camunda:properties />
             <camunda:validation />
           </camunda:formField>
-          <camunda:formField id="interest_rate" label="Interest rate" type="string" />
           <camunda:formField id="loan_amount" label="Loan amount" type="string" />
         </camunda:formData>
       </bpmn:extensionElements>
@@ -32,11 +31,6 @@
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="month_duration" label="Number of months" type="long">
-            <camunda:validation>
-              <camunda:constraint name="readonly" />
-            </camunda:validation>
-          </camunda:formField>
-          <camunda:formField id="interest_rate" label="Interest rate" type="string">
             <camunda:validation>
               <camunda:constraint name="readonly" />
             </camunda:validation>
