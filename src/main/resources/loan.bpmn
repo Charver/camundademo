@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0f7jdsc" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+  <bpmn:process id="loan" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="start">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="month_duration" label="Due date" type="long">
+            <camunda:properties />
+            <camunda:validation />
+          </camunda:formField>
+          <camunda:formField id="interest_rate" label="Interest rate" type="string" />
+          <camunda:formField id="loan_amount" label="Loan amount" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_06lyurq</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="Event_0vjulig">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="kz.camundademo.camundademo.services.loans.SaveResult" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1jk5pqz</bpmn:incoming>
+      <bpmn:incoming>Flow_0y1j9si</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_06lyurq" sourceRef="StartEvent_1" targetRef="Activity_1rl6jdr" />
+    <bpmn:userTask id="Activity_1rl6jdr" name="check input data" camunda:assignee="manager" camunda:candidateGroups="managers">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="loan_amount" type="string">
+            <camunda:properties />
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="month_duration" label="Number of months" type="long">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="interest_rate" label="Interest rate" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="comment" label="Manager comment" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="manager_approved" label="Approve?" type="enum">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+            <camunda:value id="accept" name="Accept" />
+            <camunda:value id="decline" name="Decline" />
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_06lyurq</bpmn:incoming>
+      <bpmn:outgoing>Flow_1yi0gzr</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_0ruy68o" name="approve/decline" camunda:assignee="approver" camunda:candidateGroups="approvers">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="loan_amount" type="string">
+            <camunda:properties />
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="month_duration" label="Number of months" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="interest_rate" label="Interest rate" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="comment" label="Manager comment" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="isApproved" label="Approve?" type="boolean">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+            <camunda:value id="accept" name="Accept" />
+            <camunda:value id="decline" name="Decline" />
+          </camunda:formField>
+          <camunda:formField id="final_amount" label="Amount will be paid total" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="monthly_payment" label="Monthly payment amount" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1run3qx</bpmn:incoming>
+      <bpmn:outgoing>Flow_0y1j9si</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Activity_02err85" name="calculate interest" camunda:class="kz.camundademo.camundademo.services.loans.CalculateInterest">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_0j0ffgy</bpmn:incoming>
+      <bpmn:outgoing>Flow_1run3qx</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1yi0gzr" sourceRef="Activity_1rl6jdr" targetRef="Gateway_06kp3cb" />
+    <bpmn:sequenceFlow id="Flow_0j0ffgy" sourceRef="Gateway_06kp3cb" targetRef="Activity_02err85">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${manager_approved == 'accept'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1jk5pqz" sourceRef="Gateway_06kp3cb" targetRef="Event_0vjulig" />
+    <bpmn:sequenceFlow id="Flow_0y1j9si" sourceRef="Activity_0ruy68o" targetRef="Event_0vjulig" />
+    <bpmn:sequenceFlow id="Flow_1run3qx" sourceRef="Activity_02err85" targetRef="Activity_0ruy68o" />
+    <bpmn:exclusiveGateway id="Gateway_06kp3cb" default="Flow_1jk5pqz">
+      <bpmn:incoming>Flow_1yi0gzr</bpmn:incoming>
+      <bpmn:outgoing>Flow_0j0ffgy</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1jk5pqz</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="loan">
+      <bpmndi:BPMNEdge id="Flow_1run3qx_di" bpmnElement="Flow_1run3qx">
+        <di:waypoint x="510" y="320" />
+        <di:waypoint x="510" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0y1j9si_di" bpmnElement="Flow_0y1j9si">
+        <di:waypoint x="460" y="440" />
+        <di:waypoint x="358" y="440" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1jk5pqz_di" bpmnElement="Flow_1jk5pqz">
+        <di:waypoint x="340" y="305" />
+        <di:waypoint x="340" y="422" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0j0ffgy_di" bpmnElement="Flow_0j0ffgy">
+        <di:waypoint x="365" y="280" />
+        <di:waypoint x="460" y="280" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yi0gzr_di" bpmnElement="Flow_1yi0gzr">
+        <di:waypoint x="340" y="160" />
+        <di:waypoint x="340" y="255" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06lyurq_di" bpmnElement="Flow_06lyurq">
+        <di:waypoint x="188" y="120" />
+        <di:waypoint x="290" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="159" y="145" width="23" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0vjulig_di" bpmnElement="Event_0vjulig">
+        <dc:Bounds x="322" y="422" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_06vs2a8_di" bpmnElement="Activity_1rl6jdr">
+        <dc:Bounds x="290" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1f79cia_di" bpmnElement="Activity_0ruy68o">
+        <dc:Bounds x="460" y="400" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1i1e177_di" bpmnElement="Activity_02err85">
+        <dc:Bounds x="460" y="240" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0z881tt_di" bpmnElement="Gateway_06kp3cb" isMarkerVisible="true">
+        <dc:Bounds x="315" y="255" width="50" height="50" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
